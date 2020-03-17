@@ -14,8 +14,9 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #fbfdff;
   min-height: 100vh;
+  height: 500px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -28,6 +29,38 @@
   color: #61dafb;
 }
 
+input {
+  outline: none;
+  border-top-style: hidden;
+  border-right-style: hidden;
+  border-left-style: hidden;
+  border-bottom-style: groove;
+}
+
+.button-ida, .button-volta, .button-image {
+  display: flex;
+  justify-content: space-between;
+}
+
+.button-ida span, .button-volta span {
+  font-weight: 600;
+  margin: 1em;
+  border: 2px solid black;
+  padding: .5em;
+}
+
+.section {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.block-input {
+  display: block;
+  margin-top: 0.6em;
+  margin-bottom: 0.6em;
+  height: 1.6em;
+  width: 8em;
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
