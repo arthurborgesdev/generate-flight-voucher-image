@@ -4,6 +4,7 @@ import './App.css';
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend } from 'recharts';
 import Cotacao from './Cotacao';
 import Imagem from './Imagem';
+import Input from './Input';
 
 const data = [
   {
@@ -109,6 +110,7 @@ function App() {
       </div>
       <Cotacao />
       <Imagem />
+      <Input />
     </>
   );
 }

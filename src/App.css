@@ -61,6 +61,10 @@ input {
   height: 1.6em;
   width: 8em;
 }
+
+.input-reducer input {
+  display: block;
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

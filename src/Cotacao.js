@@ -70,8 +70,8 @@ const Section = ({path, sections, deleteSection}) => (
     }
   </>
 );
-/*
-const Image = () => {
+
+const Image = ({path, departureSections, setDepartureSection, addReturnSection, returnSections, setReturnSection, generateImage}) => {
   return (
     <>
       <Flex container flexDirection="column">
@@ -156,7 +156,7 @@ const Image = () => {
   )
 }
 
-*/
+
 const Cotacao = () => {
 
   const [departureSections, setDepartureSection] = useState([]);
