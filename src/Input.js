@@ -24,6 +24,11 @@ const Input = () => {
   const onSubmit = () => {
     alert(JSON.stringify(userInput));
   }
+
+  const addExtraField = () => {
+    setUserInput({["sexo"]: "Masculino"})
+    console.log(userInput);
+  }
   
   return (
     <div className="input-reducer">
@@ -33,6 +38,10 @@ const Input = () => {
       <input type="text" name="cpf" value={userInput.cpf} onChange={handleChange} />
       <input type="text" name="address" value={userInput.address} onChange={handleChange} />
       <button type="submit" value="Submit" onClick={() => onSubmit()}>Enviar</button>
+      <button onClick={addExtraField}>Enviar</button>
+      {/*
+        userInput.map(el => console.log(el))
+      */}
     </div>
   );
 }

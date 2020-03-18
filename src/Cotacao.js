@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useReducer } from 'react';
 import styled from 'styled-components';
 import { Flex } from './Flex';
 
@@ -22,48 +22,48 @@ const Button = styled.p`
   cursor: pointer;
 `
 
-
-
-const FlightInput = ({path}) => (
+const FlightInput = ({path, sections, handleChange}) => (
   <>
-    <input className="block-input" name={path + "-cod-section-0"} placeholder="Código Voo"/>
+    <input className="block-input" name={path + "CiaAerea"} value={sections[path + "CiaAerea"]} onChange={handleChange} placeholder="Companhia"/>
+    <input className="block-input" name={path + "CodSection0"} value={sections[path + "CodSection0"]} onChange={handleChange} placeholder="Código Voo"/>
     <div style={{marginLeft: "4em"}}>
       <Paragraph>Origem/Destino</Paragraph>
       <div>
-        <input style={{height: "1.6em"}} name={path + "-origem-section-0"} placeholder="Cidade Origem"/>
+        <input style={{height: "1.6em"}} name={path + "OrigemSection0"} value={sections[path + "OrigemSection0"]} onChange={handleChange} placeholder="Cdeparturede Origem"/>
         <span> - </span>
-        <input style={{height: "1.6em"}} name={path + "-destino-section-0"} placeholder="Cidade Destino"/>
+        <input style={{height: "1.6em"}} name={path + "DestinoSection0"} value={sections[path + "DestinoSection0"]} onChange={handleChange} placeholder="Cdeparturede Destino"/>
       </div>
       
       <span>Saída:</span>
-      <input name={path + "-saida-section-0"} placeholder="Horário Saída"></input>
+      <input name={path + "SadepartureSection0"} onChange={handleChange} value={sections[path + "SadepartureSection0"]} placeholder="Horário Saída"></input>
       <span> / Chegada: </span>
-      <input name={path + "-chegada-section-0"} placeholder="Horário Chegada"></input>
+      <input name={path + "ChegadaSection0"} onChange={handleChange} value={sections[path + "ChegadaSection0"]} placeholder="Horário Chegada"></input>
     </div>
   </>
 );
 
-const Section = ({path, sections, deleteSection}) => (
+const Section = ({path, sections, blocks, deleteSection, handleChange}) => (
   <>
     {
-      sections.map(section => (
-        <div key={section} className="section">
+      blocks.map(block => (
+        <div key={block} className="section">
           <Flex container justifyContent="space-between">
-            <input className="block-input" name={path + "-cod-section-" + section} placeholder="Código Voo"/>
-            <Button inputColor="red" inputBorder="2px solid red" onClick={() => deleteSection(section)}>Remover Trajeto</Button>
+            <input className="block-input" name={path + "departureCiaAerea" + block} value={sections[path + "CiaAerea" + block]} onChange={handleChange} placeholder="Companhia"/>
+            <input className="block-input" name={path + "CodSection" + block} value={sections[path + "CodSection" + block]} onChange={handleChange} placeholder="Código Voo"/>
+            <Button inputColor="red" inputBorder="2px solid red" onClick={() => deleteSection(block)}>Remover Trajeto</Button>
           </Flex>
           <div style={{marginLeft: "4em"}}>
             <Paragraph>Origem/Destino</Paragraph>
             <div>
-              <input style={{height: "1.6em"}} name={path + "-origem-section-" + section} placeholder="Cidade Origem"/>
+              <input style={{height: "1.6em"}} name={path + "OrigemSection" + block} value={sections[path + "OrigemSection" + block]} onChange={handleChange} placeholder="Cdeparturede Origem"/>
               <span> - </span>
-              <input style={{height: "1.6em"}} name={path + "-destino-section-" + section} placeholder="Cidade Destino"/>
+              <input style={{height: "1.6em"}} name={path + "DestinoSection" + block} value={sections[path + "DestinoSection" + block]} onChange={handleChange} placeholder="Cdeparturede Destino"/>
             </div>
                    
             <span>Saída:</span>
-            <input name={path + "-saida-section-" + section} placeholder="Horário Saída"></input>
+            <input name={path + "SadepartureSection" + block} value={sections[path + "SadepartureSection" + block]} placeholder="Horário Saída"></input>
             <span> / Chegada: </span>
-            <input name={path + "-chegada-section-" + section} placeholder="Horário Chegada"></input>
+            <input name={path + "ChegadaSection" + block} value={sections[path + "ChegadaSection" + block]} placeholder="Horário Chegada"></input>
           </div>
         </div>
       ))  
@@ -71,164 +71,82 @@ const Section = ({path, sections, deleteSection}) => (
   </>
 );
 
-const Image = ({path, departureSections, setDepartureSection, addReturnSection, returnSections, setReturnSection, generateImage}) => {
-  return (
-    <>
-      <Flex container flexDirection="column">
-        <Layout>
-          <img></img>
-          <div>
-            <img></img>
-            <div className="button-ida">
-              <span>IDA</span>
-            </div>
-            <span>{}</span>
-
-            <input className="block-input" name={path + "-cod-section-0"} placeholder="Código Voo"/>
-            <div style={{marginLeft: "4em"}}>
-            <Paragraph>Origem/Destino</Paragraph>
-            <div>
-              <input style={{height: "1.6em"}} name={path + "-origem-section-0"} placeholder="Cidade Origem"/>
-              <span> - </span>
-              <input style={{height: "1.6em"}} name={path + "-destino-section-0"} placeholder="Cidade Destino"/>
-            </div>
-      
-            <span>Saída:</span>
-              <input name={path + "-saida-section-0"} placeholder="Horário Saída"></input>
-              <span> / Chegada: </span>
-              <input name={path + "-chegada-section-0"} placeholder="Horário Chegada"></input>
-            </div>
-       
-            <Section 
-              path="ida"
-              sections={departureSections}
-              deleteSection={sectionIdx => {
-                console.log(`departureSections é ${departureSections}`);
-                console.log(`sectionIdx é ${sectionIdx}`);
-                
-
-                const newSections = departureSections.filter(section => section !== sectionIdx);
-                console.log(newSections);
-                setDepartureSection(newSections);
-              }}
-            />
-          
-
-          </div>
-          
-          <div>
-            <img></img>
-            <div className="button-volta">
-              <span style={{ display: "block" }}>VOLTA</span>
-              <Button inputColor="green" inputBorder="2px solid green" onClick={addReturnSection}>Adcionar Trajeto</Button>
-            </div>
-            <input className="block-input" name="volta-cia-aerea" placeholder="Companhia"/>
-
-
-            <FlightInput path="volta"/>
-            
-            <Section 
-              path="volta"
-              sections={returnSections}
-              deleteSection={sectionIdx => {
-                console.log(`returnSections é ${returnSections}`);
-                console.log(`sectionIdx é ${sectionIdx}`);
-                
-
-                const newSections = returnSections.filter(section => section !== sectionIdx);
-                console.log(newSections);
-                setReturnSection(newSections);
-              }}
-            />
-          </div>
-          <div style={{ marginTop: "40px"}} className="button-image">
-            <div>
-              <span>VALOR: </span>
-              <input style={{height: "1.6em"}} name="valor-passagem" placeholder="Valor da passagem"/>
-            </div>
-            <Button inputColor="green" inputBorder="2px solid green" onClick={generateImage}>Gerar Imagem</Button>
-          </div>
-          
-          <img></img>
-        </Layout>
-      </Flex>
-    </>
-  )
-}
-
-
 const Cotacao = () => {
 
-  const [departureSections, setDepartureSection] = useState([]);
-  const [returnSections, setReturnSection] = useState([]);
+  const [sections, setSections] = useReducer(
+    (state, newState) => ({...state, ...newState}),
+    {
+      departureCiaAerea: '',
+      departureCodSection0: '',
+      departureOrigemSection0: '',
+      departureDestinoSection0: '',
+      departureSadepartureSection0: '',
+      departureChegadaSection0: '',
+      returnCiaAerea: '',
+      returnCodSection0: '',
+      returnOrigemSection0: '',
+      returnDestinoSection0: '',
+      returnSadepartureSection0: '',
+      returnChegadaSection0: '',
+      departure: [],
+      return: []
 
-  const addDepartureSection = () => {
-    if (departureSections.length === 0) setDepartureSection([1])
-    else setDepartureSection([...departureSections, departureSections[departureSections.length - 1] + 1])
-  }
-  
-  const addReturnSection = () => {
-    if (returnSections.length === 0) setReturnSection([1])
-    else setReturnSection([...returnSections, returnSections[returnSections.length - 1] + 1])
+    }
+  );
+
+  const handleChange = e => {
+    const name = e.target.name;
+    const newValue = e.target.value;
+
+    setSections({[name]: newValue});
   }
 
-  const generateImage = () => {}
+  const addPath = (path) => {
+      if (sections[path].length === 0) setSections({[path]: path.push(1)})
+      else setSections({[path]: path.push(path.length + 1)})
+  }
 
   return (
     <>
       <Flex container flexDirection="column">
         <Layout>
-          <img></img>
           <div>
-            <img></img>
-            <div className="button-ida">
-              <span>IDA</span>
-              <Button inputColor="green" inputBorder="2px solid green" onClick={addDepartureSection}>Adcionar Trajeto</Button>
+            <div className="button-departure">
+              <span>departure</span>
+              <Button inputColor="green" inputBorder="2px solid green">Adcionar Trajeto</Button>
             </div>
-            <input className="block-input" name="ida-cia-aerea" placeholder="Companhia"/>
-
-            <FlightInput path="ida"/>
+            
+            <FlightInput 
+              path="departure"
+              sections={sections} 
+              handleChange={handleChange}
+            />
        
             <Section 
-              path="ida"
-              sections={departureSections}
-              deleteSection={sectionIdx => {
-                console.log(`departureSections é ${departureSections}`);
-                console.log(`sectionIdx é ${sectionIdx}`);
-                
-
-                const newSections = departureSections.filter(section => section !== sectionIdx);
-                console.log(newSections);
-                setDepartureSection(newSections);
-              }}
+              path="departure"
+              sections={sections}
+              blocks={sections.departure}
+              handleChange={handleChange}
             />
-          
-
           </div>
           
           <div>
-            <img></img>
-            <div className="button-volta">
-              <span style={{ display: "block" }}>VOLTA</span>
-              <Button inputColor="green" inputBorder="2px solid green" onClick={addReturnSection}>Adcionar Trajeto</Button>
+            <div className="button-return">
+              <span style={{ display: "block" }}>return</span>
+              <Button inputColor="green" inputBorder="2px solid green">Adcionar Trajeto</Button>
             </div>
-            <input className="block-input" name="volta-cia-aerea" placeholder="Companhia"/>
 
-
-            <FlightInput path="volta"/>
+            <FlightInput 
+              path="return"
+              sections={sections}
+              handleChange={handleChange}
+            />
             
             <Section 
-              path="volta"
-              sections={returnSections}
-              deleteSection={sectionIdx => {
-                console.log(`returnSections é ${returnSections}`);
-                console.log(`sectionIdx é ${sectionIdx}`);
-                
-
-                const newSections = returnSections.filter(section => section !== sectionIdx);
-                console.log(newSections);
-                setReturnSection(newSections);
-              }}
+              path="return"
+              sections={sections}
+              blocks={sections.return}
+              handleChange={handleChange}
             />
           </div>
           <div style={{ marginTop: "40px"}} className="button-image">
@@ -236,10 +154,8 @@ const Cotacao = () => {
               <span>VALOR: </span>
               <input style={{height: "1.6em"}} name="valor-passagem" placeholder="Valor da passagem"/>
             </div>
-            <Button inputColor="green" inputBorder="2px solid green" onClick={generateImage}>Gerar Imagem</Button>
+            <Button inputColor="green" inputBorder="2px solid green">Gerar Imagem</Button>
           </div>
-          
-          <img></img>
         </Layout>
       </Flex>
     </>
