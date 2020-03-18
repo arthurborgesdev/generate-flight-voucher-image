@@ -109,8 +109,6 @@ function App() {
         </header>
       </div>
       <Cotacao />
-      <Imagem />
-      <Input />
     </>
   );
 }
