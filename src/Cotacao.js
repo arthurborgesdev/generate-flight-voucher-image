@@ -28,20 +28,20 @@ const FlightInput = ({path, sections, handleChange, addPath}) => (
       <span>{(path === "departure" ? "IDA" : "VOLTA")}</span>
       <Button inputColor="green" inputBorder="2px solid green" onClick={() => addPath(path)}>Adcionar Trajeto</Button>
     </div>
-    <input className="block-input" name={path + "CiaAerea"} value={sections[path + "CiaAerea"]} onChange={handleChange} placeholder="Companhia"/>
-    <input className="block-input" name={path + "CodSection0"} value={sections[path + "CodSection0"]} onChange={handleChange} placeholder="Código Voo"/>
+    <input className="block-input" name={path + "CiaAerea"} value={sections[path + "CiaAerea"] || ''} onChange={handleChange} placeholder="Companhia"/>
+    <input className="block-input" name={path + "CodSection0"} value={sections[path + "CodSection0"] || ''} onChange={handleChange} placeholder="Código Voo"/>
     <div style={{marginLeft: "4em"}}>
       <Paragraph>Origem/Destino</Paragraph>
       <div>
-        <input style={{height: "1.6em"}} name={path + "OrigemSection0"} value={sections[path + "OrigemSection0"]} onChange={handleChange} placeholder="Cidade Origem"/>
+        <input style={{height: "1.6em"}} name={path + "OrigemSection0"} value={sections[path + "OrigemSection0"] || ''} onChange={handleChange} placeholder="Cidade Origem"/>
         <span> - </span>
-        <input style={{height: "1.6em"}} name={path + "DestinoSection0"} value={sections[path + "DestinoSection0"]} onChange={handleChange} placeholder="Cidade Destino"/>
+        <input style={{height: "1.6em"}} name={path + "DestinoSection0"} value={sections[path + "DestinoSection0"] || ''} onChange={handleChange} placeholder="Cidade Destino"/>
       </div>
       
       <span>Saída:</span>
-      <input name={path + "SaidaSection0"} onChange={handleChange} value={sections[path + "SaidaSection0"]} placeholder="Horário Saída"></input>
+      <input name={path + "SaidaSection0"} onChange={handleChange} value={sections[path + "SaidaSection0"] || ''} placeholder="Horário Saída"></input>
       <span> / Chegada: </span>
-      <input name={path + "ChegadaSection0"} onChange={handleChange} value={sections[path + "ChegadaSection0"]} placeholder="Horário Chegada"></input>
+      <input name={path + "ChegadaSection0"} onChange={handleChange} value={sections[path + "ChegadaSection0"] || ''} placeholder="Horário Chegada"></input>
     </div>
   </>
 );
@@ -53,23 +53,23 @@ const Section = ({path, sections, blocks, deleteSection, handleChange}) => (
         <div key={block} className="section">
           <Flex container justifyContent="space-between">
             <div>
-              <input className="block-input" name={path + "departureCiaAerea" + block} value={sections[path + "CiaAerea" + block]} onChange={handleChange} placeholder="Companhia"/>
-              <input className="block-input" name={path + "CodSection" + block} value={sections[path + "CodSection" + block]} onChange={handleChange} placeholder="Código Voo"/>
+              <input className="block-input" name={path + "departureCiaAerea" + block} value={sections[path + "CiaAerea" + block] || ''} onChange={handleChange} placeholder="Companhia"/>
+              <input className="block-input" name={path + "CodSection" + block} value={sections[path + "CodSection" + block] || ''} onChange={handleChange} placeholder="Código Voo"/>
             </div>
             <Button inputColor="red" inputBorder="2px solid red" onClick={() => deleteSection(path, block)}>Remover Trajeto</Button>
           </Flex>
           <div style={{marginLeft: "4em"}}>
             <Paragraph>Origem/Destino</Paragraph>
             <div>
-              <input style={{height: "1.6em"}} name={path + "OrigemSection" + block} value={sections[path + "OrigemSection" + block]} onChange={handleChange} placeholder="Cidade Origem"/>
+              <input style={{height: "1.6em"}} name={path + "OrigemSection" + block} value={sections[path + "OrigemSection" + block] || ''} onChange={handleChange} placeholder="Cidade Origem"/>
               <span> - </span>
-              <input style={{height: "1.6em"}} name={path + "DestinoSection" + block} value={sections[path + "DestinoSection" + block]} onChange={handleChange} placeholder="Cidade Destino"/>
+              <input style={{height: "1.6em"}} name={path + "DestinoSection" + block} value={sections[path + "DestinoSection" + block] || ''} onChange={handleChange} placeholder="Cidade Destino"/>
             </div>
                    
             <span>Saída:</span>
-            <input name={path + "SaidaSection" + block} value={sections[path + "SaidaSection" + block]} onChange={handleChange} placeholder="Horário Saída"></input>
+            <input name={path + "SaidaSection" + block} value={sections[path + "SaidaSection" + block] || ''} onChange={handleChange} placeholder="Horário Saída"></input>
             <span> / Chegada: </span>
-            <input name={path + "ChegadaSection" + block} value={sections[path + "ChegadaSection" + block]} onChange={handleChange} placeholder="Horário Chegada"></input>
+            <input name={path + "ChegadaSection" + block} value={sections[path + "ChegadaSection" + block] || ''} onChange={handleChange} placeholder="Horário Chegada"></input>
           </div>
         </div>
       ))  
@@ -95,7 +95,8 @@ const Cotacao = () => {
       returnSaidaSection0: '',
       returnChegadaSection0: '',
       departure: [],
-      return: []
+      return: [],
+      value: ''
 
     }
   );
@@ -129,6 +130,8 @@ const Cotacao = () => {
     delete sections[path + "ChegadaSection" + idx];
     setSections({[path]: newSections});
   }
+
+  const generateImage = () => { console.log(sections)};
 
   return (
     <>
@@ -170,9 +173,9 @@ const Cotacao = () => {
           <div style={{ marginTop: "40px"}} className="button-image">
             <div>
               <span>VALOR: </span>
-              <input style={{height: "1.6em"}} name="valor-passagem" placeholder="Valor da passagem"/>
+              <input style={{height: "1.6em"}} type="number" name="valor-passagem" placeholder="Valor da passagem" onChange={handleChange}/>
             </div>
-            <Button inputColor="green" inputBorder="2px solid green">Gerar Imagem</Button>
+            <Button inputColor="green" inputBorder="2px solid green" onClick={() => generateImage()}>Gerar Imagem</Button>
           </div>
         </Layout>
       </Flex>
