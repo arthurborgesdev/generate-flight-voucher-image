@@ -1,6 +1,11 @@
 import React, { useReducer } from 'react';
 import styled from 'styled-components';
 import { Flex } from './Flex';
+import IdaPlane from './ida-plane.png';
+import voltaPlane from './volta-plane.png';
+import Logo from './logo.png';
+import Title from './title.png';
+
 
 const Layout = styled.div`
   margin: 0 auto;
@@ -9,6 +14,7 @@ const Layout = styled.div`
 const Paragraph = styled.p`
   margin-bottom: 5px;
   margin-top: 5px;
+  font-weight: 600;
 `;
 
 const Button = styled.p`
@@ -28,7 +34,7 @@ const FlightInput = ({path, sections, handleChange, addPath}) => (
       <span>{(path === "departure" ? "IDA" : "VOLTA")}</span>
       <Button inputColor="green" inputBorder="2px solid green" onClick={() => addPath(path)}>Adcionar Trajeto</Button>
     </div>
-    <input className="block-input" name={path + "CiaAerea"} value={sections[path + "CiaAerea"] || ''} onChange={handleChange} placeholder="Companhia"/>
+    <input className="block-input" name={path + "CiaAerea0"} value={sections[path + "CiaAerea0"] || ''} onChange={handleChange} placeholder="Companhia"/>
     <input className="block-input" name={path + "CodSection0"} value={sections[path + "CodSection0"] || ''} onChange={handleChange} placeholder="Código Voo"/>
     <div style={{marginLeft: "4em"}}>
       <Paragraph>Origem/Destino</Paragraph>
@@ -139,8 +145,8 @@ const Cotacao = () => {
                                    .map(entry => entry[0]) // pega somente a chave 
                                    .map(key => key.split(/([0-9]+)/)) // extrai os números dos textos das chaves
                                    .flat() // junta tudo em um array só
-    let numberOfDepartures = flatKeys.filter(i => i === "departureCiaAerea").length;
-    let numberOfReturns = flatKeys.filter(i => i === "returnCiaAerea").length;
+    let numberOfDepartures = flatKeys.filter(i => i === "departureCiaAerea").length - 1;
+    let numberOfReturns = flatKeys.filter(i => i === "returnCiaAerea").length - 1;
     console.log(numberOfDepartures, numberOfReturns);
     setSections(
       {
@@ -195,60 +201,71 @@ const Cotacao = () => {
             <Button inputColor="green" inputBorder="2px solid green" onClick={() => generateImage()}>Gerar Imagem</Button>
           </div>
         </Layout>
-        <>
-        {console.log(sections.numberOfDepartures)}
+        <Layout>
+          <div style={{marginBottom: "2em", marginTop: "2em"}}>
+            <img src={Title} />
+          </div> 
+          <img src={IdaPlane} /><span><strong>IDA</strong></span>
+          {console.log(sections.numberOfDepartures)}
           {[...Array(sections.numberOfDepartures)].map((_, idx) => {
             return (
               <>
                 <Flex container justifyContent="space-between">
                   <div>
-                    <p className="block-input" key={"CiaAerea" + idx}>{sections.departureCiaAerea}</p>
-                    <p className="block-input" key={"departureCodSection0"}>{sections["departureCodSection" + idx]}</p>
+                    <p className="block-input" style={{fontWeight: "600"}} key={"CiaAerea" + idx}>{sections["departureCiaAerea" + idx].toUpperCase()}</p>
+                    <p className="block-input" style={{marginBottom: "0", fontWeight: "600"}} key={"departureCodSection" + idx}>{sections["departureCodSection" + idx]}</p>
                   </div>
                 </Flex>
-                <div style={{marginLeft: "4em"}}>
+                <div style={{marginLeft: "4em", marginTop: "0", marginBottom: "2em"}}>
                   <Paragraph>Origem/Destino</Paragraph>
                   <div>
-                    <span style={{height: "1.6em"}} name={"departureOrigemSection" + idx}>{sections["departureOrigemSection" + idx]}</span>
+                    <span style={{height: "1.6em"}} name={"departureOrigemSection" + idx}>{sections["departureOrigemSection" + idx].toUpperCase()}</span>
                     <span> - </span>
-                    <span style={{height: "1.6em"}} name={"departureDestinoSection" + idx}>{sections["departureDestinoSection" + idx]}</span>
+                    <span style={{height: "1.6em"}} name={"departureDestinoSection" + idx}>{sections["departureDestinoSection" + idx].toUpperCase()}</span>
                   </div>
                        
-                  <span>Saída: </span>
+                  <span style={{fontWeight: "600"}}>Saída: </span>
                   <span name={"departureSaidaSection" + idx}>{sections["departureSaidaSection" + idx]}</span>
-                    <span> / Chegada: </span>
+                    <span style={{fontWeight: "600"}}> / Chegada: </span>
                   <span name={"departureChegadaSection" + idx}>{sections["departureChegadaSection" + idx]}</span>
                 </div>
               </>
             )
           })}
-
+          <img src={voltaPlane}/><span><strong>VOLTA</strong></span>
           {[...Array(sections.numberOfReturns)].map((_, idx) => {
             return (
               <>
                 <Flex container justifyContent="space-between">
                   <div>
-                    <p className="block-input" key={"CiaAerea" + idx}>{sections.returnCiaAerea}</p>
-                    <p className="block-input" key={"returnCodSection0"}>{sections["returnCodSection" + idx]}</p>
+                    <p className="block-input" style={{fontWeight: "600"}} key={"CiaAerea0" + idx}>{sections["returnCiaAerea" + idx].toUpperCase()}</p>
+                    <p className="block-input" style={{marginBottom: "0", fontWeight: "600"}} key={"returnCodSection" + idx}>{sections["returnCodSection" + idx]}</p>
                   </div>
                 </Flex>
-                <div style={{marginLeft: "4em"}}>
+                <div style={{marginLeft: "4em", marginBottom: "2em"}}>
                   <Paragraph>Origem/Destino</Paragraph>
                   <div>
-                    <span style={{height: "1.6em"}} name={"returnOrigemSection" + idx}>{sections["returnOrigemSection" + idx]}</span>
+                    <span style={{height: "1.6em"}} name={"returnOrigemSection" + idx}>{sections["returnOrigemSection" + idx].toUpperCase()}</span>
                     <span> - </span>
-                    <span style={{height: "1.6em"}} name={"returnDestinoSection" + idx}>{sections["returnDestinoSection" + idx]}</span>
+                    <span style={{height: "1.6em"}} name={"returnDestinoSection" + idx}>{sections["returnDestinoSection" + idx].toUpperCase()}</span>
                   </div>
                        
-                  <span>Saída: </span>
+                  <span style={{fontWeight: "600"}}>Saída: </span>
                   <span name={"returnSaidaSection" + idx}>{sections["returnSaidaSection" + idx]}</span>
-                    <span> / Chegada: </span>
+                    <span style={{fontWeight: "600"}}> / Chegada: </span>
                   <span name={"returnChegadaSection" + idx}>{sections["returnChegadaSection" + idx]}</span>
                 </div>
               </>
             )
           })}
-        </>
+          <div style={{margin: "10px"}}>
+            <span><strong>VALOR: </strong></span>
+            <span style={{height: "1.6em"}} type="number" name="valor-passagem"><strong>{sections["valor-passagem"]}</strong></span>
+          </div>
+          <div style={{marginTop: "2em"}}>
+            <img src={Logo} />
+          </div> 
+        </Layout>
       </Flex>
     </>
   )
