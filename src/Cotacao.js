@@ -38,7 +38,7 @@ const FlightInput = ({path, sections, handleChange, addPath}) => (
         <input style={{height: "1.6em"}} name={path + "DestinoSection0"} value={sections[path + "DestinoSection0"] || ''} onChange={handleChange} placeholder="Cidade Destino"/>
       </div>
       
-      <span>Saída:</span>
+      <span>Saída: </span>
       <input name={path + "SaidaSection0"} onChange={handleChange} value={sections[path + "SaidaSection0"] || ''} placeholder="Horário Saída"></input>
       <span> / Chegada: </span>
       <input name={path + "ChegadaSection0"} onChange={handleChange} value={sections[path + "ChegadaSection0"] || ''} placeholder="Horário Chegada"></input>
@@ -53,7 +53,7 @@ const Section = ({path, sections, blocks, deleteSection, handleChange}) => (
         <div key={block} className="section">
           <Flex container justifyContent="space-between">
             <div>
-              <input className="block-input" name={path + "departureCiaAerea" + block} value={sections[path + "CiaAerea" + block] || ''} onChange={handleChange} placeholder="Companhia"/>
+              <input className="block-input" name={path + "CiaAerea" + block} value={sections[path + "CiaAerea" + block] || ''} onChange={handleChange} placeholder="Companhia"/>
               <input className="block-input" name={path + "CodSection" + block} value={sections[path + "CodSection" + block] || ''} onChange={handleChange} placeholder="Código Voo"/>
             </div>
             <Button inputColor="red" inputBorder="2px solid red" onClick={() => deleteSection(path, block)}>Remover Trajeto</Button>
@@ -66,7 +66,7 @@ const Section = ({path, sections, blocks, deleteSection, handleChange}) => (
               <input style={{height: "1.6em"}} name={path + "DestinoSection" + block} value={sections[path + "DestinoSection" + block] || ''} onChange={handleChange} placeholder="Cidade Destino"/>
             </div>
                    
-            <span>Saída:</span>
+            <span>Saída: </span>
             <input name={path + "SaidaSection" + block} value={sections[path + "SaidaSection" + block] || ''} onChange={handleChange} placeholder="Horário Saída"></input>
             <span> / Chegada: </span>
             <input name={path + "ChegadaSection" + block} value={sections[path + "ChegadaSection" + block] || ''} onChange={handleChange} placeholder="Horário Chegada"></input>
@@ -96,7 +96,9 @@ const Cotacao = () => {
       returnChegadaSection0: '',
       departure: [],
       return: [],
-      value: ''
+      value: '',
+      numberOfDepartures: 0,
+      numberOfReturns: 0
 
     }
   );
@@ -131,7 +133,22 @@ const Cotacao = () => {
     setSections({[path]: newSections});
   }
 
-  const generateImage = () => { console.log(sections)};
+  const generateImage = () => { 
+    console.log(sections);
+    let flatKeys = Object.entries(sections) // extrai os conjuntos em chave e valor
+                                   .map(entry => entry[0]) // pega somente a chave 
+                                   .map(key => key.split(/([0-9]+)/)) // extrai os números dos textos das chaves
+                                   .flat() // junta tudo em um array só
+    let numberOfDepartures = flatKeys.filter(i => i === "departureCiaAerea").length;
+    let numberOfReturns = flatKeys.filter(i => i === "returnCiaAerea").length;
+    console.log(numberOfDepartures, numberOfReturns);
+    setSections(
+      {
+        "numberOfReturns": numberOfReturns,
+        "numberOfDepartures": numberOfDepartures
+      }
+    );
+  };
 
   return (
     <>
@@ -178,6 +195,60 @@ const Cotacao = () => {
             <Button inputColor="green" inputBorder="2px solid green" onClick={() => generateImage()}>Gerar Imagem</Button>
           </div>
         </Layout>
+        <>
+        {console.log(sections.numberOfDepartures)}
+          {[...Array(sections.numberOfDepartures)].map((_, idx) => {
+            return (
+              <>
+                <Flex container justifyContent="space-between">
+                  <div>
+                    <p className="block-input" key={"CiaAerea" + idx}>{sections.departureCiaAerea}</p>
+                    <p className="block-input" key={"departureCodSection0"}>{sections["departureCodSection" + idx]}</p>
+                  </div>
+                </Flex>
+                <div style={{marginLeft: "4em"}}>
+                  <Paragraph>Origem/Destino</Paragraph>
+                  <div>
+                    <span style={{height: "1.6em"}} name={"departureOrigemSection" + idx}>{sections["departureOrigemSection" + idx]}</span>
+                    <span> - </span>
+                    <span style={{height: "1.6em"}} name={"departureDestinoSection" + idx}>{sections["departureDestinoSection" + idx]}</span>
+                  </div>
+                       
+                  <span>Saída: </span>
+                  <span name={"departureSaidaSection" + idx}>{sections["departureSaidaSection" + idx]}</span>
+                    <span> / Chegada: </span>
+                  <span name={"departureChegadaSection" + idx}>{sections["departureChegadaSection" + idx]}</span>
+                </div>
+              </>
+            )
+          })}
+
+          {[...Array(sections.numberOfReturns)].map((_, idx) => {
+            return (
+              <>
+                <Flex container justifyContent="space-between">
+                  <div>
+                    <p className="block-input" key={"CiaAerea" + idx}>{sections.returnCiaAerea}</p>
+                    <p className="block-input" key={"returnCodSection0"}>{sections["returnCodSection" + idx]}</p>
+                  </div>
+                </Flex>
+                <div style={{marginLeft: "4em"}}>
+                  <Paragraph>Origem/Destino</Paragraph>
+                  <div>
+                    <span style={{height: "1.6em"}} name={"returnOrigemSection" + idx}>{sections["returnOrigemSection" + idx]}</span>
+                    <span> - </span>
+                    <span style={{height: "1.6em"}} name={"returnDestinoSection" + idx}>{sections["returnDestinoSection" + idx]}</span>
+                  </div>
+                       
+                  <span>Saída: </span>
+                  <span name={"returnSaidaSection" + idx}>{sections["returnSaidaSection" + idx]}</span>
+                    <span> / Chegada: </span>
+                  <span name={"returnChegadaSection" + idx}>{sections["returnChegadaSection" + idx]}</span>
+                </div>
+              </>
+            )
+          })}
+        </>
       </Flex>
     </>
   )
